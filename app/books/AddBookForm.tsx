@@ -2,33 +2,53 @@
 
 import { useState } from "react";
 import { useMutation } from "@apollo/client/react";
+import { useNotify } from "../notifications/NotificationProvider";
 import {
   CREATE_BOOK,
   GET_BOOKS,
   type CreateBookData,
   type CreateBookVars,
+  type GetBooksData,
 } from "@/lib/graphql/books";
 
 export function AddBookForm() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [price, setPrice] = useState("");
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const notify = useNotify();
 
   const [createBook, { loading, error }] = useMutation<
     CreateBookData,
     CreateBookVars
   >(CREATE_BOOK, {
-    // After a successful create, re-run GET_BOOKS so the list picks up the new
-    // book. awaitRefetchQueries keeps `loading` true until that refetch finishes.
-    refetchQueries: [{ query: GET_BOOKS }],
-    awaitRefetchQueries: true,
+    // Instead of refetching the whole list, write the newly created book straight
+    // into the cached GET_BOOKS result. No extra network request.
+    update(cache, { data }) {
+      const created = data?.createBook.book;
+      if (!created) return; // validation failed — nothing to insert
+
+      cache.updateQuery<GetBooksData>({ query: GET_BOOKS }, (existing) =>
+        existing ? { books: [...existing.books, created] } : existing,
+      );
+    },
   });
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    await createBook({
+    const result = await createBook({
       variables: { title, author, price: Number(price) },
     });
+
+    const errors = result.data?.createBook.errors ?? [];
+    if (errors.length > 0) {
+      setValidationErrors(errors);
+      notify("Couldn't add book", "error");
+      return; // keep the entered values so the user can fix them
+    }
+
+    setValidationErrors([]);
+    notify(`Added "${title}"`);
     setTitle("");
     setAuthor("");
     setPrice("");
@@ -67,6 +87,13 @@ export function AddBookForm() {
       </button>
       {error && (
         <p className="text-sm text-red-800">Something went wrong: {error.message}</p>
+      )}
+      {validationErrors.length > 0 && (
+        <ul className="list-disc pl-5 text-sm text-red-800">
+          {validationErrors.map((message) => (
+            <li key={message}>{message}</li>
+          ))}
+        </ul>
       )}
     </form>
   );

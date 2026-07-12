@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useQuery } from "@apollo/client/react";
 import { GET_BOOKS, type GetBooksData } from "@/lib/graphql/books";
+import { DeleteButton } from "./DeleteButton";
 
 export function BookList() {
   const { data, loading, error, refetch } = useQuery<GetBooksData>(GET_BOOKS);
@@ -35,14 +36,15 @@ export function BookList() {
   return (
     <ul className="space-y-2">
       {books.map((book) => (
-        <li key={book.id}>
-          <Link
-            href={`/books/${book.id}`}
-            className="block rounded border border-gray-200 p-3 hover:bg-gray-50"
-          >
+        <li
+          key={book.id}
+          className="flex items-center rounded border border-gray-200 pr-3 hover:bg-gray-50"
+        >
+          <Link href={`/books/${book.id}`} className="flex-1 p-3">
             <span className="font-medium">{book.title}</span> — {book.author}{" "}
             <span className="text-gray-500">(₹{book.price})</span>
           </Link>
+          <DeleteButton id={book.id} />
         </li>
       ))}
     </ul>

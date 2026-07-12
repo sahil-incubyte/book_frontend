@@ -127,7 +127,8 @@ export const DELETE_BOOK = gql`
 
 export type DeleteBookData = {
   deleteBook: {
-    book: { id: string } | null;
+    __typename?: "DeleteBookPayload";
+    book: { __typename?: "Book"; id: string } | null;
     errors: string[];
   };
 };

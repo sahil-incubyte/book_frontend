@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ApolloClientProvider } from "./apollo-provider";
+import { ReduxProvider } from "./redux-provider";
+import { NotificationProvider } from "./notifications/NotificationProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +31,11 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <ApolloClientProvider>{children}</ApolloClientProvider>
+        <ApolloClientProvider>
+          <ReduxProvider>
+            <NotificationProvider>{children}</NotificationProvider>
+          </ReduxProvider>
+        </ApolloClientProvider>
       </body>
     </html>
   );

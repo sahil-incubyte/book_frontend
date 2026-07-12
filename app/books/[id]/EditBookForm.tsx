@@ -13,6 +13,7 @@ export function EditBookForm({ book }: { book: Book }) {
   const [title, setTitle] = useState(book.title);
   const [author, setAuthor] = useState(book.author);
   const [price, setPrice] = useState(String(book.price));
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   const [updateBook, { loading, error }] = useMutation<
     UpdateBookData,
@@ -21,9 +22,10 @@ export function EditBookForm({ book }: { book: Book }) {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    await updateBook({
+    const result = await updateBook({
       variables: { id: book.id, title, author, price: Number(price) },
     });
+    setValidationErrors(result.data?.updateBook.errors ?? []);
   }
 
   return (
@@ -57,6 +59,13 @@ export function EditBookForm({ book }: { book: Book }) {
       </button>
       {error && (
         <p className="text-sm text-red-800">Something went wrong: {error.message}</p>
+      )}
+      {validationErrors.length > 0 && (
+        <ul className="list-disc pl-5 text-sm text-red-800">
+          {validationErrors.map((message) => (
+            <li key={message}>{message}</li>
+          ))}
+        </ul>
       )}
     </form>
   );
