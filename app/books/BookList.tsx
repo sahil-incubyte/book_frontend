@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useQuery } from "@apollo/client/react";
 import { GET_BOOKS, type GetBooksData } from "@/lib/graphql/books";
 import { DeleteButton } from "./DeleteButton";
+import { FavoriteButton } from "./FavoriteButton";
 
 export function BookList() {
   const { data, loading, error, refetch } = useQuery<GetBooksData>(GET_BOOKS);
@@ -40,6 +41,7 @@ export function BookList() {
           key={book.id}
           className="flex items-center rounded border border-gray-200 pr-3 hover:bg-gray-50"
         >
+          <FavoriteButton id={book.id} />
           <Link href={`/books/${book.id}`} className="flex-1 p-3">
             <span className="font-medium">{book.title}</span> — {book.author}{" "}
             <span className="text-gray-500">(₹{book.price})</span>
