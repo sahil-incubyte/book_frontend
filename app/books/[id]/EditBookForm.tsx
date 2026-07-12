@@ -1,0 +1,63 @@
+"use client";
+
+import { useState } from "react";
+import { useMutation } from "@apollo/client/react";
+import {
+  UPDATE_BOOK,
+  type Book,
+  type UpdateBookData,
+  type UpdateBookVars,
+} from "@/lib/graphql/books";
+
+export function EditBookForm({ book }: { book: Book }) {
+  const [title, setTitle] = useState(book.title);
+  const [author, setAuthor] = useState(book.author);
+  const [price, setPrice] = useState(String(book.price));
+
+  const [updateBook, { loading, error }] = useMutation<
+    UpdateBookData,
+    UpdateBookVars
+  >(UPDATE_BOOK);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await updateBook({
+      variables: { id: book.id, title, author, price: Number(price) },
+    });
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="mt-6 space-y-3 rounded border border-gray-200 p-4">
+      <p className="text-sm font-medium text-gray-500">Edit this book</p>
+      <input
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        required
+        className="w-full rounded border border-gray-300 px-3 py-2"
+      />
+      <input
+        value={author}
+        onChange={(e) => setAuthor(e.target.value)}
+        required
+        className="w-full rounded border border-gray-300 px-3 py-2"
+      />
+      <input
+        value={price}
+        onChange={(e) => setPrice(e.target.value)}
+        type="number"
+        required
+        className="w-full rounded border border-gray-300 px-3 py-2"
+      />
+      <button
+        type="submit"
+        disabled={loading}
+        className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
+      >
+        {loading ? "Saving…" : "Save changes"}
+      </button>
+      {error && (
+        <p className="text-sm text-red-800">Something went wrong: {error.message}</p>
+      )}
+    </form>
+  );
+}
