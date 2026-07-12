@@ -1,35 +1,28 @@
 "use client";
 
 import { useMutation } from "@apollo/client/react";
-import {
-  DELETE_BOOK,
-  type DeleteBookData,
-  type DeleteBookVars,
-} from "@/lib/graphql/books";
+import { DELETE_BOOK } from "@/lib/graphql/books";
 
 export function DeleteButton({ id }: { id: string }) {
-  const [deleteBook, { loading }] = useMutation<DeleteBookData, DeleteBookVars>(
-    DELETE_BOOK,
-    {
-      // The result we expect. Apollo applies this to the cache immediately, then
-      // reconciles with the server response (rolling back if it disagrees).
-      optimisticResponse: {
-        deleteBook: {
-          __typename: "DeleteBookPayload",
-          book: { __typename: "Book", id },
-          errors: [],
-        },
-      },
-      // Remove the book from the cache. Its ref in ROOT_QUERY.books becomes
-      // dangling and Apollo filters it out of the list automatically.
-      update(cache, { data }) {
-        const deletedId = data?.deleteBook.book?.id;
-        if (!deletedId) return;
-        cache.evict({ id: cache.identify({ __typename: "Book", id: deletedId }) });
-        cache.gc();
+  const [deleteBook, { loading }] = useMutation(DELETE_BOOK, {
+    // The result we expect. Apollo applies this to the cache immediately, then
+    // reconciles with the server response (rolling back if it disagrees).
+    optimisticResponse: {
+      deleteBook: {
+        __typename: "DeleteBookPayload",
+        book: { __typename: "Book", id },
+        errors: [],
       },
     },
-  );
+    // Remove the book from the cache. Its ref in ROOT_QUERY.books becomes
+    // dangling and Apollo filters it out of the list automatically.
+    update(cache, { data }) {
+      const deletedId = data?.deleteBook.book?.id;
+      if (!deletedId) return;
+      cache.evict({ id: cache.identify({ __typename: "Book", id: deletedId }) });
+      cache.gc();
+    },
+  });
 
   function handleClick() {
     if (!window.confirm("Delete this book?")) return;

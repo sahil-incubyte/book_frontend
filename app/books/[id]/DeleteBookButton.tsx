@@ -2,20 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { useMutation } from "@apollo/client/react";
-import {
-  DELETE_BOOK,
-  GET_BOOKS,
-  type DeleteBookData,
-  type DeleteBookVars,
-} from "@/lib/graphql/books";
+import { DELETE_BOOK, GET_BOOKS } from "@/lib/graphql/books";
 
 export function DeleteBookButton({ id }: { id: string }) {
   const router = useRouter();
 
-  const [deleteBook, { loading, error }] = useMutation<
-    DeleteBookData,
-    DeleteBookVars
-  >(DELETE_BOOK, {
+  const [deleteBook, { loading, error }] = useMutation(DELETE_BOOK, {
     // Like create, delete needs the list re-fetched so the removed book disappears.
     refetchQueries: [{ query: GET_BOOKS }],
     awaitRefetchQueries: true,

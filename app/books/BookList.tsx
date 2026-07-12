@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useQuery } from "@apollo/client/react";
-import { GET_BOOKS, type GetBooksData } from "@/lib/graphql/books";
+import { GET_BOOKS } from "@/lib/graphql/books";
 import { DeleteButton } from "./DeleteButton";
 import { FavoriteButton } from "./FavoriteButton";
 
 export function BookList() {
-  const { data, loading, error, refetch } = useQuery<GetBooksData>(GET_BOOKS);
+  const { data, loading, error, refetch } = useQuery(GET_BOOKS);
 
   if (loading) {
     return <BooksSkeleton />;

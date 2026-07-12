@@ -6,8 +6,6 @@ import { useNotify } from "../notifications/NotificationProvider";
 import {
   CREATE_BOOK,
   GET_BOOKS,
-  type CreateBookData,
-  type CreateBookVars,
   type GetBooksData,
 } from "@/lib/graphql/books";
 
@@ -18,10 +16,7 @@ export function AddBookForm() {
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const notify = useNotify();
 
-  const [createBook, { loading, error }] = useMutation<
-    CreateBookData,
-    CreateBookVars
-  >(CREATE_BOOK, {
+  const [createBook, { loading, error }] = useMutation(CREATE_BOOK, {
     // Instead of refetching the whole list, write the newly created book straight
     // into the cached GET_BOOKS result. No extra network request.
     update(cache, { data }) {
@@ -34,7 +29,7 @@ export function AddBookForm() {
     },
   });
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     const result = await createBook({
       variables: { title, author, price: Number(price) },

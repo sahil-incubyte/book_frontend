@@ -2,12 +2,7 @@
 
 import { useState } from "react";
 import { useMutation } from "@apollo/client/react";
-import {
-  UPDATE_BOOK,
-  type Book,
-  type UpdateBookData,
-  type UpdateBookVars,
-} from "@/lib/graphql/books";
+import { UPDATE_BOOK, type Book } from "@/lib/graphql/books";
 
 export function EditBookForm({ book }: { book: Book }) {
   const [title, setTitle] = useState(book.title);
@@ -15,12 +10,9 @@ export function EditBookForm({ book }: { book: Book }) {
   const [price, setPrice] = useState(String(book.price));
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
-  const [updateBook, { loading, error }] = useMutation<
-    UpdateBookData,
-    UpdateBookVars
-  >(UPDATE_BOOK);
+  const [updateBook, { loading, error }] = useMutation(UPDATE_BOOK);
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     const result = await updateBook({
       variables: { id: book.id, title, author, price: Number(price) },

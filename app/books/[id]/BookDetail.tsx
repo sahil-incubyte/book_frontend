@@ -2,16 +2,12 @@
 
 import Link from "next/link";
 import { useQuery } from "@apollo/client/react";
-import {
-  GET_BOOK,
-  type GetBookData,
-  type GetBookVars,
-} from "@/lib/graphql/books";
+import { GET_BOOK } from "@/lib/graphql/books";
 import { EditBookForm } from "./EditBookForm";
 import { DeleteBookButton } from "./DeleteBookButton";
 
 export function BookDetail({ id }: { id: string }) {
-  const { data, loading, error } = useQuery<GetBookData, GetBookVars>(GET_BOOK, {
+  const { data, loading, error } = useQuery(GET_BOOK, {
     variables: { id },
   });
 

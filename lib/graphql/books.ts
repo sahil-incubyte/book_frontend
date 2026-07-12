@@ -1,7 +1,7 @@
-import { gql } from "@apollo/client";
+import { gql, type TypedDocumentNode } from "@apollo/client";
 
 // Fetches every book. Mirrors the `books` query we ran in GraphiQL.
-export const GET_BOOKS = gql`
+export const GET_BOOKS: TypedDocumentNode<GetBooksData, Record<string, never>> = gql`
   query GetBooks {
     books {
       id
@@ -28,7 +28,7 @@ export type GetBooksData = {
 };
 
 // Fetches one book by id. `$id: ID!` declares a required variable.
-export const GET_BOOK = gql`
+export const GET_BOOK: TypedDocumentNode<GetBookData, GetBookVars> = gql`
   query GetBook($id: ID!) {
     book(id: $id) {
       id
@@ -56,7 +56,7 @@ export type GetBookVars = {
 // Creates a book. The backend uses Relay-style mutations, so all arguments are
 // wrapped in a single `input` object. Returns the new book plus a list of
 // validation errors (empty on success) — we surface `errors` in Step 3.5.
-export const CREATE_BOOK = gql`
+export const CREATE_BOOK: TypedDocumentNode<CreateBookData, CreateBookVars> = gql`
   mutation CreateBook($title: String!, $author: String!, $price: Int!) {
     createBook(input: { title: $title, author: $author, price: $price }) {
       book {
@@ -85,7 +85,7 @@ export type CreateBookVars = {
 
 // Updates a book. `id` is required; the other fields are optional (partial update).
 // Returning `id` + changed fields lets Apollo auto-update its normalized cache.
-export const UPDATE_BOOK = gql`
+export const UPDATE_BOOK: TypedDocumentNode<UpdateBookData, UpdateBookVars> = gql`
   mutation UpdateBook($id: ID!, $title: String, $author: String, $price: Int) {
     updateBook(input: { id: $id, title: $title, author: $author, price: $price }) {
       book {
@@ -114,7 +114,7 @@ export type UpdateBookVars = {
 };
 
 // Deletes a book. We only need the id back to know which one was removed.
-export const DELETE_BOOK = gql`
+export const DELETE_BOOK: TypedDocumentNode<DeleteBookData, DeleteBookVars> = gql`
   mutation DeleteBook($id: ID!) {
     deleteBook(input: { id: $id }) {
       book {
