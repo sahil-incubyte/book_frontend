@@ -1,0 +1,11 @@
+mutation UpdateBook($id: ID!, $title: String, $author: String, $price: Int) {
+  updateBook(input: { id: $id, title: $title, author: $author, price: $price }) {
+    book {
+      id
+      title
+      author
+      price
+    }
+    errors
+  }
+}

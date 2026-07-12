@@ -1,0 +1,8 @@
+mutation DeleteBook($id: ID!) {
+  deleteBook(input: { id: $id }) {
+    book {
+      id
+    }
+    errors
+  }
+}

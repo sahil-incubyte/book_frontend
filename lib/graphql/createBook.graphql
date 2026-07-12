@@ -1,0 +1,11 @@
+mutation CreateBook($title: String!, $author: String!, $price: Int!) {
+  createBook(input: { title: $title, author: $author, price: $price }) {
+    book {
+      id
+      title
+      author
+      price
+    }
+    errors
+  }
+}
