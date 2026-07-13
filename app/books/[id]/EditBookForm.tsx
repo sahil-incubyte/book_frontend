@@ -17,7 +17,7 @@ export function EditBookForm({ book }: { book: Book }) {
     const result = await updateBook({
       variables: { id: book.id, title, author, price: Number(price) },
     });
-    setValidationErrors(result.data?.updateBook.errors ?? []);
+    setValidationErrors(result.data?.updateBook?.errors ?? []);
   }
 
   return (

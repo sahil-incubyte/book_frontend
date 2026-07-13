@@ -9,15 +9,14 @@ export function DeleteButton({ id }: { id: string }) {
     // reconciles with the server response (rolling back if it disagrees).
     optimisticResponse: {
       deleteBook: {
-        __typename: "DeleteBookPayload",
-        book: { __typename: "Book", id },
+        book: { id },
         errors: [],
       },
     },
     // Remove the book from the cache. Its ref in ROOT_QUERY.books becomes
     // dangling and Apollo filters it out of the list automatically.
     update(cache, { data }) {
-      const deletedId = data?.deleteBook.book?.id;
+      const deletedId = data?.deleteBook?.book?.id;
       if (!deletedId) return;
       cache.evict({ id: cache.identify({ __typename: "Book", id: deletedId }) });
       cache.gc();

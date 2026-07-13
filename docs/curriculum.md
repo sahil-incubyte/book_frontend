@@ -63,9 +63,9 @@ Goal: Confident component tests, including mocked GraphQL.
 
 ## Module 7: Refactor to GraphQL Code Generator
 Goal: Replace hand-written queries/types with generated, schema-accurate code.
-- [ ] Step 7.1: Set up graphql-codegen (client-preset, Apollo v4-safe)
-- [ ] Step 7.2: Convert queries and mutations to generated typed documents
-- [ ] Step 7.3: Delete now-redundant hand-written types
+- [x] Step 7.1: Set up graphql-codegen (reads .graphql files, Apollo v4-safe)
+- [x] Step 7.2: Move operations to .graphql files; books.ts re-exports generated docs
+- [x] Step 7.3: Delete now-redundant hand-written types
 
 ## Module 8: Ship It
 Goal: Document and publish.

@@ -20,7 +20,7 @@ export function AddBookForm() {
     // Instead of refetching the whole list, write the newly created book straight
     // into the cached GET_BOOKS result. No extra network request.
     update(cache, { data }) {
-      const created = data?.createBook.book;
+      const created = data?.createBook?.book;
       if (!created) return; // validation failed — nothing to insert
 
       cache.updateQuery<GetBooksData>({ query: GET_BOOKS }, (existing) =>
@@ -35,7 +35,7 @@ export function AddBookForm() {
       variables: { title, author, price: Number(price) },
     });
 
-    const errors = result.data?.createBook.errors ?? [];
+    const errors = result.data?.createBook?.errors ?? [];
     if (errors.length > 0) {
       setValidationErrors(errors);
       notify("Couldn't add book", "error");
