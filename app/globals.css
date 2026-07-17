@@ -1,4 +1,11 @@
-@import "tailwindcss";
+/* Tailwind v4, WITHOUT Preflight (its `base` layer).
+   Chakra UI owns the CSS reset, so importing Tailwind's Preflight too would
+   cause a double-reset that fights Chakra over base element styles.
+   We import only Tailwind's theme tokens + utilities. */
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
 
 :root {
   --background: #ffffff;
@@ -17,10 +24,4 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }

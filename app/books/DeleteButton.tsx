@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client/react";
 import { DELETE_BOOK } from "@/lib/graphql/books";
 
@@ -29,13 +30,17 @@ export function DeleteButton({ id }: { id: string }) {
   }
 
   return (
-    <button
+    <Button
       onClick={handleClick}
-      disabled={loading}
+      loading={loading}
       aria-label="Delete book"
-      className="ml-3 shrink-0 rounded border border-red-300 px-2 py-1 text-xs text-red-700 hover:bg-red-50 disabled:opacity-50"
+      colorPalette="red"
+      variant="outline"
+      size="xs"
+      ml={3}
+      flexShrink={0}
     >
       Delete
-    </button>
+    </Button>
   );
 }
