@@ -7,6 +7,11 @@
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
 
+/* Make Tailwind's `dark:` variant follow the `.dark` class that next-themes
+   sets on <html>, instead of the OS media query. This keeps Tailwind's dark
+   styles in sync with Chakra's color mode toggle. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -19,9 +24,9 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Dark values flip via the `.dark` class (toggled by next-themes), not the OS
+   media query, so the color-mode button controls them. */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
