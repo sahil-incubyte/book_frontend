@@ -1,5 +1,6 @@
 import { render } from "@testing-library/react";
-import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
+import { system } from "@/components/ui/system";
 import { MockedProvider } from "@apollo/client/testing/react";
 import type { MockLink } from "@apollo/client/testing";
 import { Provider } from "react-redux";
@@ -20,7 +21,7 @@ export function renderWithProviders(
 ) {
   function Wrapper({ children }: { children: ReactNode }) {
     return (
-      <ChakraProvider value={defaultSystem}>
+      <ChakraProvider value={system}>
         <MockedProvider mocks={mocks}>
           <Provider store={store}>
             <NotificationProvider>{children}</NotificationProvider>

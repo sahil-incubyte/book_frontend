@@ -102,7 +102,7 @@ export function AddBookForm() {
 
             <Button
               type="submit"
-              colorPalette="blue"
+              colorPalette="brand"
               loading={loading}
               loadingText="Adding…"
               alignSelf="flex-start"
