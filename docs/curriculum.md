@@ -70,3 +70,15 @@ Goal: Replace hand-written queries/types with generated, schema-accurate code.
 ## Module 8: Ship It
 Goal: Document and publish.
 - [ ] Step 8.1: Write README and push to GitHub
+
+## Module 9: Frontend Enhancement — Chakra UI & Tailwind CSS (Day 9)
+Goal: A polished, themeable, responsive UI combining Chakra UI v3 and Tailwind CSS v4, with working light/dark mode.
+- [x] Step 9.1: Install Chakra UI v3 + Emotion (verify v3 needs only 2 packages)
+- [x] Step 9.2: Generate the Chakra provider + color-mode snippet (CLI) and wire into the root layout
+- [x] Step 9.3: Resolve the reset conflict — let Chakra own the reset, drop Tailwind Preflight
+- [x] Step 9.4: Rebuild the book list with Chakra components (Card, Alert, Skeleton, Stack, Button)
+- [x] Step 9.5: Convert AddBookForm to Chakra form components (Field/Input); wire Chakra into the test harness
+- [x] Step 9.6: Build a custom theme with `createSystem` (brand palette + Geist fonts)
+- [x] Step 9.7: Add a light/dark mode toggle; sync Tailwind's `dark:` variant to Chakra's `.dark` class
+- [x] Step 9.8: Responsive design combining Chakra breakpoint props and Tailwind prefixes
+- [x] Step 9.9: Record progress and push the Day 9 branch to GitHub
