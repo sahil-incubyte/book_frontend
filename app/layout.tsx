@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Provider as ChakraUIProvider } from "@/components/ui/provider";
 import { ApolloClientProvider } from "./apollo-provider";
 import { ReduxProvider } from "./redux-provider";
 import { NotificationProvider } from "./notifications/NotificationProvider";
@@ -28,14 +29,17 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <ApolloClientProvider>
-          <ReduxProvider>
-            <NotificationProvider>{children}</NotificationProvider>
-          </ReduxProvider>
-        </ApolloClientProvider>
+        <ChakraUIProvider>
+          <ApolloClientProvider>
+            <ReduxProvider>
+              <NotificationProvider>{children}</NotificationProvider>
+            </ReduxProvider>
+          </ApolloClientProvider>
+        </ChakraUIProvider>
       </body>
     </html>
   );

@@ -2,6 +2,15 @@
 
 import { useState } from "react";
 import { useMutation } from "@apollo/client/react";
+import {
+  Alert,
+  Button,
+  Card,
+  Field,
+  Input,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { useNotify } from "../notifications/NotificationProvider";
 import {
   CREATE_BOOK,
@@ -50,46 +59,81 @@ export function AddBookForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mb-6 space-y-3 rounded border border-gray-200 p-4">
-      <input
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Title"
-        required
-        className="w-full rounded border border-gray-300 px-3 py-2"
-      />
-      <input
-        value={author}
-        onChange={(e) => setAuthor(e.target.value)}
-        placeholder="Author"
-        required
-        className="w-full rounded border border-gray-300 px-3 py-2"
-      />
-      <input
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
-        placeholder="Price"
-        type="number"
-        required
-        className="w-full rounded border border-gray-300 px-3 py-2"
-      />
-      <button
-        type="submit"
-        disabled={loading}
-        className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
-      >
-        {loading ? "Adding…" : "Add book"}
-      </button>
-      {error && (
-        <p className="text-sm text-red-800">Something went wrong: {error.message}</p>
-      )}
-      {validationErrors.length > 0 && (
-        <ul className="list-disc pl-5 text-sm text-red-800">
-          {validationErrors.map((message) => (
-            <li key={message}>{message}</li>
-          ))}
-        </ul>
-      )}
-    </form>
+    <Card.Root mb={6}>
+      <Card.Body>
+        <form onSubmit={handleSubmit}>
+          <Stack gap={3}>
+            <Field.Root required>
+              <Field.Label>
+                Title <Field.RequiredIndicator />
+              </Field.Label>
+              <Input
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="e.g. The Pragmatic Programmer"
+                required
+              />
+            </Field.Root>
+
+            <Field.Root required>
+              <Field.Label>
+                Author <Field.RequiredIndicator />
+              </Field.Label>
+              <Input
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+                placeholder="e.g. Andy Hunt"
+                required
+              />
+            </Field.Root>
+
+            <Field.Root required>
+              <Field.Label>
+                Price <Field.RequiredIndicator />
+              </Field.Label>
+              <Input
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="e.g. 499"
+                type="number"
+                required
+              />
+            </Field.Root>
+
+            <Button
+              type="submit"
+              colorPalette="brand"
+              loading={loading}
+              loadingText="Adding…"
+              alignSelf="flex-start"
+            >
+              Add book
+            </Button>
+
+            {error && (
+              <Text color="fg.error" fontSize="sm">
+                Something went wrong: {error.message}
+              </Text>
+            )}
+
+            {validationErrors.length > 0 && (
+              <Alert.Root status="error" borderRadius="md">
+                <Alert.Indicator />
+                <Alert.Content>
+                  <Alert.Title>Couldn&apos;t add book</Alert.Title>
+                  <Alert.Description>
+                    <Stack as="ul" gap={1} listStyleType="disc" ps={5}>
+                      {validationErrors.map((message) => (
+                        <li key={message}>{message}</li>
+                      ))}
+                    </Stack>
+                  </Alert.Description>
+                </Alert.Content>
+              </Alert.Root>
+            )}
+          </Stack>
+        </form>
+      </Card.Body>
+    </Card.Root>
   );
 }

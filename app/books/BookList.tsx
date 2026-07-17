@@ -1,7 +1,16 @@
 "use client";
 
-import Link from "next/link";
+import NextLink from "next/link";
 import { useQuery } from "@apollo/client/react";
+import {
+  Alert,
+  Button,
+  Card,
+  Link,
+  Skeleton,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { GET_BOOKS } from "@/lib/graphql/books";
 import { DeleteButton } from "./DeleteButton";
 import { FavoriteButton } from "./FavoriteButton";
@@ -15,50 +24,66 @@ export function BookList() {
 
   if (error) {
     return (
-      <div className="rounded border border-red-200 bg-red-50 p-4 text-red-800">
-        <p className="font-medium">Couldn&apos;t load books.</p>
-        <p className="mt-1 text-sm">{error.message}</p>
-        <button
-          onClick={() => refetch()}
-          className="mt-3 rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700"
-        >
-          Try again
-        </button>
-      </div>
+      <Alert.Root status="error" borderRadius="md">
+        <Alert.Indicator />
+        <Alert.Content>
+          <Alert.Title>Couldn&apos;t load books.</Alert.Title>
+          <Alert.Description>{error.message}</Alert.Description>
+          <Button
+            mt={3}
+            size="sm"
+            colorPalette="red"
+            alignSelf="flex-start"
+            onClick={() => refetch()}
+          >
+            Try again
+          </Button>
+        </Alert.Content>
+      </Alert.Root>
     );
   }
 
   const books = data?.books ?? [];
 
   if (books.length === 0) {
-    return <p className="text-gray-500">No books yet.</p>;
+    return <Text color="fg.muted">No books yet.</Text>;
   }
 
   return (
-    <ul className="space-y-2">
+    <Stack gap={2}>
       {books.map((book) => (
-        <li
+        <Card.Root
           key={book.id}
-          className="flex items-center rounded border border-gray-200 pr-3 hover:bg-gray-50"
+          flexDirection="row"
+          alignItems="center"
+          pr={3}
+          _hover={{ bg: "bg.subtle" }}
         >
           <FavoriteButton id={book.id} />
-          <Link href={`/books/${book.id}`} className="flex-1 p-3">
-            <span className="font-medium">{book.title}</span> — {book.author}{" "}
-            <span className="text-gray-500">(₹{book.price})</span>
+          <Link asChild flex="1" py={3} _hover={{ textDecoration: "none" }}>
+            <NextLink href={`/books/${book.id}`}>
+              <Text as="span" fontWeight="medium">
+                {book.title}
+              </Text>{" "}
+              — {book.author}{" "}
+              <Text as="span" color="fg.muted">
+                (₹{book.price})
+              </Text>
+            </NextLink>
           </Link>
           <DeleteButton id={book.id} />
-        </li>
+        </Card.Root>
       ))}
-    </ul>
+    </Stack>
   );
 }
 
 function BooksSkeleton() {
   return (
-    <ul className="space-y-2" aria-hidden>
+    <Stack gap={2} aria-hidden>
       {[0, 1, 2].map((row) => (
-        <li key={row} className="h-11 animate-pulse rounded bg-gray-100" />
+        <Skeleton key={row} height="11" borderRadius="md" />
       ))}
-    </ul>
+    </Stack>
   );
 }

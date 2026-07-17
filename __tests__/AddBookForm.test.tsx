@@ -9,9 +9,9 @@ async function fillForm(
   user: ReturnType<typeof userEvent.setup>,
   values: { title: string; author: string; price: string },
 ) {
-  await user.type(screen.getByPlaceholderText("Title"), values.title);
-  await user.type(screen.getByPlaceholderText("Author"), values.author);
-  await user.type(screen.getByPlaceholderText("Price"), values.price);
+  await user.type(screen.getByLabelText(/title/i), values.title);
+  await user.type(screen.getByLabelText(/author/i), values.author);
+  await user.type(screen.getByLabelText(/price/i), values.price);
   await user.click(screen.getByRole("button", { name: /add book/i }));
 }
 
@@ -45,7 +45,7 @@ test("creates a book and clears the form on success", async () => {
   // Success toast appears...
   expect(await screen.findByText(/Added "New Book"/)).toBeInTheDocument();
   // ...and the form is cleared.
-  expect(screen.getByPlaceholderText("Title")).toHaveValue("");
+  expect(screen.getByLabelText(/title/i)).toHaveValue("");
 });
 
 test("shows server validation errors and keeps the entered values", async () => {
@@ -74,5 +74,5 @@ test("shows server validation errors and keeps the entered values", async () => 
     await screen.findByText("Price must be greater than or equal to 0"),
   ).toBeInTheDocument();
   // ...and the form keeps what the user typed so they can fix it.
-  expect(screen.getByPlaceholderText("Title")).toHaveValue("Bad");
+  expect(screen.getByLabelText(/title/i)).toHaveValue("Bad");
 });
