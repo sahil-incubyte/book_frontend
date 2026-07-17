@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "@apollo/client": "^4.2.6",
+    "@chakra-ui/react": "^3.36.0",
+    "@emotion/react": "^11.14.0",
     "@reduxjs/toolkit": "^2.12.0",
     "graphql": "^16.14.2",
     "next": "16.2.10",
