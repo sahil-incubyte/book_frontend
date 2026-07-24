@@ -1,7 +1,7 @@
 import { Container, Heading } from "@chakra-ui/react";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import { AddBookForm } from "./AddBookForm";
-import { BookList } from "./BookList";
+import { BookBrowser } from "./BookBrowser";
 import { FavoritesCount } from "./FavoritesCount";
 
 export default function BooksPage() {
@@ -17,7 +17,7 @@ export default function BooksPage() {
         </div>
       </div>
       <AddBookForm />
-      <BookList />
+      <BookBrowser />
     </Container>
   );
 }

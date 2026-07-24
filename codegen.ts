@@ -17,6 +17,10 @@ const config: CodegenConfig = {
         scalars: {
           ISO8601DateTime: "string",
         },
+        // Emit enums as plain string-union types. This keeps a single
+        // representation shared by the schema and operation plugins (avoids the
+        // duplicate `enum` + `type` declarations the two plugins otherwise emit).
+        enumsAsTypes: true,
       },
     },
   },

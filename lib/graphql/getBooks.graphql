@@ -1,5 +1,17 @@
-query GetBooks {
-  books {
+query GetBooks(
+  $search: String
+  $minPrice: Int
+  $maxPrice: Int
+  $sortBy: BookSortField
+  $sortDirection: SortDirection
+) {
+  books(
+    search: $search
+    minPrice: $minPrice
+    maxPrice: $maxPrice
+    sortBy: $sortBy
+    sortDirection: $sortDirection
+  ) {
     id
     title
     author
