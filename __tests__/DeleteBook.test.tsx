@@ -6,7 +6,7 @@ import { GET_BOOKS, DELETE_BOOK } from "@/lib/graphql/books";
 import { BookList } from "@/app/books/BookList";
 
 const booksMock: MockLink.MockedResponse = {
-  request: { query: GET_BOOKS },
+  request: { query: GET_BOOKS, variables: { search: undefined } },
   result: {
     data: {
       books: [
@@ -34,7 +34,7 @@ test("removes a book from the list when its Delete button is clicked", async () 
   const user = userEvent.setup();
   const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(true);
 
-  renderWithProviders(<BookList />, { mocks: [booksMock, deleteMock] });
+  renderWithProviders(<BookList search="" />, { mocks: [booksMock, deleteMock] });
 
   // Both books load first.
   expect(await screen.findByText("Harry Potter")).toBeInTheDocument();

@@ -12,11 +12,39 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { GET_BOOKS } from "@/lib/graphql/books";
+import type { BookSortField, SortDirection } from "@/lib/gql/graphql";
 import { DeleteButton } from "./DeleteButton";
 import { FavoriteButton } from "./FavoriteButton";
 
-export function BookList() {
-  const { data, loading, error, refetch } = useQuery(GET_BOOKS);
+type BookListProps = {
+  search: string;
+  minPrice?: number;
+  maxPrice?: number;
+  sortBy?: BookSortField;
+  sortDirection?: SortDirection;
+  onClearFilters?: () => void;
+};
+
+export function BookList({
+  search,
+  minPrice,
+  maxPrice,
+  sortBy,
+  sortDirection,
+  onClearFilters,
+}: BookListProps) {
+  const trimmedSearch = search.trim();
+  const filtersActive =
+    trimmedSearch !== "" || minPrice != null || maxPrice != null;
+  const { data, loading, error, refetch } = useQuery(GET_BOOKS, {
+    variables: {
+      search: trimmedSearch === "" ? undefined : trimmedSearch,
+      minPrice,
+      maxPrice,
+      sortBy,
+      sortDirection,
+    },
+  });
 
   if (loading) {
     return <BooksSkeleton />;
@@ -46,7 +74,11 @@ export function BookList() {
   const books = data?.books ?? [];
 
   if (books.length === 0) {
-    return <Text color="fg.muted">No books yet.</Text>;
+    return filtersActive ? (
+      <NoResults onClearFilters={onClearFilters} />
+    ) : (
+      <Text color="fg.muted">No books yet.</Text>
+    );
   }
 
   return (
@@ -75,6 +107,31 @@ export function BookList() {
         </Card.Root>
       ))}
     </Stack>
+  );
+}
+
+function NoResults({ onClearFilters }: { onClearFilters?: () => void }) {
+  return (
+    <Alert.Root status="info" borderRadius="md">
+      <Alert.Indicator />
+      <Alert.Content>
+        <Alert.Title>No results match your filters</Alert.Title>
+        <Alert.Description>
+          Try adjusting your search or price range, or clear the filters to see
+          all books.
+        </Alert.Description>
+        <Button
+          mt={3}
+          size="sm"
+          variant="outline"
+          colorPalette="brand"
+          alignSelf="flex-start"
+          onClick={onClearFilters}
+        >
+          Clear filters
+        </Button>
+      </Alert.Content>
+    </Alert.Root>
   );
 }
 
